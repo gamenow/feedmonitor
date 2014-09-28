@@ -16,8 +16,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -34,6 +32,8 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +45,7 @@ import com.hotinno.feedmonitor.dao.config.Transmission;
 
 @Component
 public class BtSeedsMonitor {
-	private static Log log = LogFactory.getLog(BtSeedsMonitor.class);
+	private static Logger log = LoggerFactory.getLogger(BtSeedsMonitor.class);
 
 	private static final String HTTP = "http://";
 	private static final String PORT_DELIMITER = ":";
@@ -174,8 +174,7 @@ public class BtSeedsMonitor {
 
 		List<BtSeed> seeds = btSeedDao.getAllUnProcessed();
 		if (log.isDebugEnabled()) {
-			log.debug(String.format("Unprocessed seeds number is: %s",
-					seeds.size()));
+			log.debug("Unprocessed seeds number is: {}", seeds.size());
 		}
 		for (BtSeed seed : seeds) {
 			seed.setProcessedTime(new Timestamp(System.currentTimeMillis()));
@@ -333,14 +332,17 @@ public class BtSeedsMonitor {
 		}
 		X509TrustManager tm = new X509TrustManager() {
 
+			@Override
 			public void checkClientTrusted(X509Certificate[] xcs,
 					String string) throws CertificateException {
 			}
 
+			@Override
 			public void checkServerTrusted(X509Certificate[] xcs,
 					String string) throws CertificateException {
 			}
 
+			@Override
 			public X509Certificate[] getAcceptedIssuers() {
 				return null;
 			}

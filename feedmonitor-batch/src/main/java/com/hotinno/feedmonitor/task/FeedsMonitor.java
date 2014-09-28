@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ import com.sun.syndication.io.XmlReader;
 
 @Component
 public class FeedsMonitor {
-	private static Log log = LogFactory.getLog(FeedsMonitor.class);
+	private static Logger log = LoggerFactory.getLogger(FeedsMonitor.class);
 
 	@Autowired
 	private FeedDao feedDao;
@@ -40,7 +40,7 @@ public class FeedsMonitor {
 	public void runFeedsMonitor() {
 		List<Feed> feeds = feedDao.getAll();
 
-		log.warn(String.format("Checking %s feeds...", feeds.size()));
+		log.warn("Checking {} feeds...", feeds.size());
 
 		checkFeeds(feeds);
 	}
@@ -59,11 +59,11 @@ public class FeedsMonitor {
 				long current = System.currentTimeMillis();
 
 				if (log.isDebugEnabled()) {
-					log.debug(String.format("Start checking %s...", url));
+					log.debug("Start checking {}...", url);
 				}
 				SyndFeed syndFeed = getSyndFeed(url);
 				if (log.isDebugEnabled()) {
-					log.debug(String.format("End checking %s...", url));
+					log.debug("End checking {}...", url);
 				}
 
 				@SuppressWarnings("unchecked")

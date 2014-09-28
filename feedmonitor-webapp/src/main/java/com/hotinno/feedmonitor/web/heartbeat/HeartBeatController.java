@@ -7,8 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -25,7 +25,7 @@ import com.hotinno.feedmonitor.util.WebUtil;
 
 @Controller
 public class HeartBeatController {
-	private static Log log = LogFactory.getLog(HeartBeatController.class);
+	private static Logger log = LoggerFactory.getLogger(HeartBeatController.class);
 
 	@Autowired
 	private HeartBeatDao heartBeatDao;
