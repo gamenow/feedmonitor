@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,13 +59,9 @@ public class FeedsMonitor {
 			try {
 				long current = System.currentTimeMillis();
 
-				if (log.isDebugEnabled()) {
-					log.debug("Start checking {}...", url);
-				}
+				log.debug("Start checking {}...", url);
 				SyndFeed syndFeed = getSyndFeed(url);
-				if (log.isDebugEnabled()) {
-					log.debug("End checking {}...", url);
-				}
+				log.debug("End checking {}...", url);
 
 				@SuppressWarnings("unchecked")
 				List<SyndEntry> entries = syndFeed.getEntries();
@@ -73,6 +70,7 @@ public class FeedsMonitor {
 				for (Feed feed : feedMap.get(url)) {
 
 					String[] keywords = feed.getKeywords().split("[ ,]");
+					log.debug("Checking for keywords: {}", Arrays.toString(keywords));
 
 					for (SyndEntry entry : entries) {
 						if (feed.getLastUpdated() == null
@@ -81,6 +79,7 @@ public class FeedsMonitor {
 							boolean match = true;
 
 							String title = entry.getTitle().toLowerCase();
+							log.debug("Title is: {}", title);
 							for (String keyword : keywords) {
 								if (title.indexOf(keyword.toLowerCase()) < 0) {
 									match = false;
