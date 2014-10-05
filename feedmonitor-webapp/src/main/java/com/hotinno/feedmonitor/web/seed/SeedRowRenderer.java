@@ -8,7 +8,6 @@ import org.zkoss.zk.ui.api.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.SizeEvent;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
@@ -39,20 +38,6 @@ public class SeedRowRenderer implements RowRenderer {
 	public static final String LABEL_DELETE = "Delete";
 	public static final String LABEL_CLEAR = "Clear Processed";
 
-	private static final int ROW_WIDTH_WITHOUT_NAME_COLUMN =
-	// Adding Time
-	130
-	// Processed
-			+ 100
-			// Processed Time
-			+ 130
-			// Comment
-			+ 80
-			// Actions
-			+ 180
-			// Overhead
-			+ 10;
-
 	private String lastHeartBeat;
 
 	public void setLastHeartBeat(String lastHeartBeat) {
@@ -63,12 +48,6 @@ public class SeedRowRenderer implements RowRenderer {
 
 	public void setLastFeedFetch(String lastFeedFetch) {
 		this.lastFeedFetch = lastFeedFetch;
-	}
-
-	private int desktopWidth;
-
-	public void setDesktopWidth(int desktopWidth) {
-		this.desktopWidth = desktopWidth;
 	}
 
 	@Override
@@ -85,10 +64,6 @@ public class SeedRowRenderer implements RowRenderer {
 				"Last Heart Beat: %s\nLast FeedFetch: %s", lastHeartBeat,
 				lastFeedFetch);
 
-		int rowWidth = desktopWidth - ROW_WIDTH_WITHOUT_NAME_COLUMN;
-//		int nameLength = getNameLength(rowWidth);
-		int nameLength = 65;
-
 		row.setId(PREFIX_SEED_ROW_ID + id);
 
 		Div nameDiv = new Div();
@@ -96,29 +71,12 @@ public class SeedRowRenderer implements RowRenderer {
 		final Label name = new Label();
 		name.setId(PREFIX_SEED_NAME_ID + id);
 		String nameStr = seed.getName();
-		name.setTooltiptext(nameStr);
-		setNameValue(name, nameLength);
-		name.setStyle("align:'left';");
+		name.setValue(nameStr);
+		name.setTooltiptext(String.format("%s\n%s", nameStr, seed.getMagnetUrl()));
+		name.setStyle("align:'left';overflow:hidden;white-space:nowrap;text-overflow:ellipsis;");
 		name.setWidth("99%");
 
 		nameDiv.appendChild(name);
-
-		nameDiv.addEventListener(Events.ON_SIZE, new EventListener() {
-			@Override
-			public void onEvent(Event event) throws Exception {
-				SizeEvent se = (SizeEvent) event;
-
-				try {
-					int width = Integer.parseInt(se.getWidth());
-					int nameLength = getNameLength(width);
-
-					setNameValue(name, nameLength);
-				} catch (NumberFormatException e) {
-					// Do nothing
-				}
-
-			}
-		});
 
 		Datebox addingTime = new Datebox(seed.getDate());
 		addingTime.setId(PREFIX_SEED_ADDING_TIME_ID + id);
@@ -179,23 +137,6 @@ public class SeedRowRenderer implements RowRenderer {
 		row.appendChild(comment);
 		row.appendChild(btnDiv);
 	}
-
-	public void setNameValue(Label name, int nameLength) {
-		String nameStr = name.getTooltiptext();
-		if (nameStr.length() > nameLength) {
-			name.setValue(nameStr.substring(0, nameLength - 3) + "...");
-		} else {
-			name.setValue(nameStr);
-		}
-	}
-
-	public int getNameLength(int rowWidth) {
-		if (rowWidth < 100) {
-			rowWidth = 100;
-		}
-		int nameLength = rowWidth / 5;
-		return nameLength;
-	}
 }
 
 abstract class SeedEventListener implements EventListener {
@@ -251,6 +192,7 @@ class DeleteFeedEventListener extends SeedEventListener {
 							| Messagebox.NO, Messagebox.QUESTION,
 							Messagebox.NO,
 							new org.zkoss.zk.ui.event.EventListener() {
+								@Override
 								public void onEvent(Event e) {
 									if (Messagebox.ON_YES.equals(e.getName())) {
 										BtSeedDao seedDao = SpringUtil

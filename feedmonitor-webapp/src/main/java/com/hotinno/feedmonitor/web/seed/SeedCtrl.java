@@ -13,10 +13,7 @@ import org.springframework.stereotype.Component;
 import org.zkoss.spring.context.annotation.EventHandler;
 import org.zkoss.spring.util.GenericSpringComposer;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Button;
@@ -37,6 +34,7 @@ import com.hotinno.feedmonitor.dao.heartbeat.HeartBeatDao;
 public class SeedCtrl extends GenericSpringComposer {
 
 	private static final long serialVersionUID = 8481008130846652429L;
+
 	private static final Pattern PATTERN_MAGNET_BT = Pattern
 			.compile("(xt=urn:btih:[a-zA-Z0-9]+)");
 
@@ -123,24 +121,6 @@ public class SeedCtrl extends GenericSpringComposer {
 
 		seedGrid.setRowRenderer(rowRenderer);
 		seedGrid.setModel(getGridModel());
-
-		comp.addEventListener(Events.ON_CLIENT_INFO, new EventListener() {
-			@Override
-			public void onEvent(Event event) throws Exception {
-				ClientInfoEvent cie = (ClientInfoEvent) event;
-
-				// String message = String.format(
-				// "Screen: %s, %s\nDesktop: %s, %s\nOffset: %s, %s",
-				// cie.getScreenWidth(), cie.getScreenHeight(),
-				// cie.getDesktopWidth(), cie.getDesktopHeight(),
-				// cie.getDesktopXOffset(), cie.getDesktopYOffset());
-				//
-				// Messagebox.show(message);
-
-				rowRenderer.setDesktopWidth(cie.getDesktopWidth());
-				seedGrid.renderAll();
-			}
-		});
 	}
 
 	@EventHandler("addSeedBtn.onClick")
