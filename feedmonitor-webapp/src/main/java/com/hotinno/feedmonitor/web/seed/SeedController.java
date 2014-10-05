@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,9 +34,13 @@ public class SeedController {
 	}
 
 	@RequestMapping(value = "/seeds")
-	public @ResponseBody List<BtSeed> seeds() {
-		// Send unprocessed seeds back
-		return btSeedDao.getAllUnProcessed();
+	public @ResponseBody List<BtSeed> seeds(@RequestParam(required=false) String processed) {
+		if (!Boolean.parseBoolean(processed)) {
+			// Send unprocessed seeds back
+			return btSeedDao.getAllUnProcessed();
+		} else {
+			return btSeedDao.getAll();
+		}
 	}
 
 	@RequestMapping(value = "/seeds/{seedId}")
