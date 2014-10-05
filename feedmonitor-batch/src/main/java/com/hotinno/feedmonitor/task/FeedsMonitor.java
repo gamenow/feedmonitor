@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -65,7 +64,7 @@ public class FeedsMonitor {
 
 				@SuppressWarnings("unchecked")
 				List<SyndEntry> entries = syndFeed.getEntries();
-				List<BtSeed> seeds = new ArrayList<BtSeed>(entries.size());
+				Map<String, BtSeed> seeds = new HashMap<>(entries.size());
 
 				for (Feed feed : feedMap.get(url)) {
 
@@ -89,11 +88,12 @@ public class FeedsMonitor {
 
 							if (match) {
 								String magnetUrl = entry.getLink();
-								if (!btSeedDao.isMagnetUrlExisted(magnetUrl)) {
+								if (!seeds.containsKey(magnetUrl)
+										&& !btSeedDao.isMagnetUrlExisted(magnetUrl)) {
 									BtSeed seed = new BtSeed(entry.getTitle(),
 											magnetUrl);
 									seed.setProcessed(false);
-									seeds.add(seed);
+									seeds.put(magnetUrl, seed);
 								}
 							}
 						}
@@ -104,7 +104,7 @@ public class FeedsMonitor {
 				}
 
 				if (seeds.size() > 0) {
-					btSeedDao.persist(seeds);
+					btSeedDao.persist(seeds.values());
 				}
 			} catch (Exception e) {
 				log.error(String.format(
