@@ -6,7 +6,6 @@
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:cloud="http://schema.cloudfoundry.org/spring"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:zksp="http://www.zkoss.org/2008/zkspring/core"
@@ -27,8 +26,6 @@
 			http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
 		http://www.springframework.org/schema/task
 			http://www.springframework.org/schema/task/spring-task.xsd
-		http://schema.cloudfoundry.org/spring
-			http://schema.cloudfoundry.org/spring/cloudfoundry-spring.xsd
 		http://www.zkoss.org/2008/zkspring/core
 			http://www.zkoss.org/2008/zkspring/core/zkspring-core.xsd">
 

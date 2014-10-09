@@ -3,7 +3,7 @@
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:cloud="http://schema.cloudfoundry.org/spring" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:zksp="http://www.zkoss.org/2008/zkspring/core"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/aop
@@ -18,8 +18,6 @@
 			http://www.springframework.org/schema/jee/spring-jee.xsd
 		http://www.springframework.org/schema/tx
 			http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://schema.cloudfoundry.org/spring
-			http://schema.cloudfoundry.org/spring/cloudfoundry-spring.xsd
 		http://www.springframework.org/schema/task
 			http://www.springframework.org/schema/task/spring-task.xsd
 		http://www.zkoss.org/2008/zkspring/core

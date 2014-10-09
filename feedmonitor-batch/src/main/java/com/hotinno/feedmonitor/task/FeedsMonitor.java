@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,11 @@ public class FeedsMonitor {
 
 	@Autowired
 	private BtSeedDao btSeedDao;
+
+	@PostConstruct
+	private void postConstruct() {
+		log.debug("postConstruct for FeedsMonitor.", new Throwable());
+	}
 
 	@Scheduled(cron = "0 */15 * * * ?")
 	public void runFeedsMonitor() {
