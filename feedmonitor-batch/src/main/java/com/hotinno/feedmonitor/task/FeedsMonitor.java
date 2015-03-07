@@ -40,7 +40,7 @@ public class FeedsMonitor {
 
 	@PostConstruct
 	private void postConstruct() {
-		log.debug("postConstruct for FeedsMonitor.", new Throwable());
+		log.debug("postConstruct for FeedsMonitor.");
 	}
 
 	@Scheduled(cron = "0 */15 * * * ?")

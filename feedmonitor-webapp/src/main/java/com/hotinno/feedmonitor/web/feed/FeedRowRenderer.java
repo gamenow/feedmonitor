@@ -1,7 +1,6 @@
 package com.hotinno.feedmonitor.web.feed;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.zkoss.spring.SpringUtil;
 import org.zkoss.zk.ui.api.HtmlBasedComponent;
@@ -28,12 +27,6 @@ public class FeedRowRenderer implements RowRenderer {
 	public static final String LABEL_DELETE = "Delete";
 	public static final String LABEL_CLEAR = "Clear Last Update";
 	public static final String LABEL_CHECK = "Check Now!";
-
-	@Autowired
-	private FeedsMonitor feedMonitor;
-
-	@Autowired
-	private FeedDao feedDao;
 
 	@Override
 	public void render(Row row, Object data) throws Exception {
@@ -98,7 +91,7 @@ public class FeedRowRenderer implements RowRenderer {
 		Button checkBtn = new Button();
 		checkBtn.setLabel(LABEL_CHECK);
 		checkBtn.addEventListener(Events.ON_CLICK, new CheckFeedEventListener(
-				checkBtn, id, feedMonitor, feedDao));
+				checkBtn, id));
 
 		Div btnDiv = new Div();
 		btnDiv.appendChild(deleteBtn);
@@ -236,15 +229,10 @@ class CheckFeedEventListener extends FeedEventListener {
 
 	private final Button button;
 	private final long id;
-	private final FeedsMonitor feedMonitor;
-	private final FeedDao feedDao;
 
-	public CheckFeedEventListener(Button button, long id,
-			FeedsMonitor feedMonitor, FeedDao feedDao) {
+	public CheckFeedEventListener(Button button, long id) {
 		this.button = button;
 		this.id = id;
-		this.feedMonitor = feedMonitor;
-		this.feedDao = feedDao;
 	}
 
 	@Override
@@ -257,7 +245,14 @@ class CheckFeedEventListener extends FeedEventListener {
 					final Feed feed = getTargetFeed(button, id);
 					feed.setLastUpdated(null);
 
+					FeedsMonitor feedMonitor = SpringUtil
+							.getApplicationContext()
+							.getBean(FeedsMonitor.class);
+
 					feedMonitor.checkFeeds(id);
+
+					FeedDao feedDao = SpringUtil.getApplicationContext()
+							.getBean(FeedDao.class);
 
 					Feed f = feedDao.getById(id);
 
